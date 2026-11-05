@@ -97,19 +97,20 @@ The system then forwards this information using UDP to a configured receiver.
 
 Before uploading the code, update the Wi‑Fi and UDP settings:
 
-
+```
 const char * ssid_Router = "NETGEAR97";
 const char * password_Router = "yellowriver414";
 
 const char * udpAddress = "192.168.0.10";
 const int udpPort = 9990;
-
+```
 Replace these values with the actual local network credentials and target host IP.
 
 Example Serial Output
-
+```
 into RX mode
 received packet "1" with Pitch: 125 and Roll: -42, RSSI: -75, length 4
+```
 This output confirms that a packet was received, decoded, and forwarded successfully.
 
 OLED Display
