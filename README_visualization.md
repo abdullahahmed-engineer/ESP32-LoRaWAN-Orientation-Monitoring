@@ -49,10 +49,10 @@ This project is useful for academic demonstrations, research prototyping, and le
 
 Install dependencies using:
 
-
+```
 bash
 pip install pygame PyOpenGL numpy
-
+```
 System Architecture
 The system operates in two main parts:
 
@@ -69,18 +69,19 @@ logs values
 updates the OpenGL visualization
 Data Packet Format
 The incoming UDP payload is 5 bytes long:
-
+```
 Byte 0: roll low byte
 Byte 1: roll high byte
 Byte 2: pitch low byte
 Byte 3: pitch high byte
 Byte 4: counter value
+```
 The script reconstructs:
-
+```
 roll = int.from_bytes(data[0:2], byteorder='little', signed=True)
 pitch = int.from_bytes(data[2:4], byteorder='little', signed=True)
 val = data[4]
-
+```
 This allows the host to reconstruct the motion values from the compact binary packet.
 
 Visualization
@@ -90,13 +91,13 @@ This provides a simple visual representation of the motion being measured by the
 
 Logging
 The script writes received values to a file called:
-
+```
 gyroscope_data.txt
-
+```
 Each logged line contains:
-
+```
 Roll: <value>, Pitch: <value>, Counter: <value>
-
+```
 This allows the data to be reviewed or processed later.
 
 How to Run
@@ -106,10 +107,11 @@ Run the Python script
 Observe the rotating cube and the logged sensor values in the terminal.
 
 Example Output
+```
 Roll: 12, Pitch: -6, Counter: 104
 Roll: 13, Pitch: -7, Counter: 105
 Roll: 15, Pitch: -8, Counter: 106
-
+```
 Notes and Limitations
 This project is a prototype and has the following limitations:
 
