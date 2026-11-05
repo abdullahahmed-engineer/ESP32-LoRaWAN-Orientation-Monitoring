@@ -71,54 +71,58 @@ The sender node performs the following steps:
 ## Sensor Processing
 
 The code reads acceleration data from the MPU-6050 registers starting at `0x3B`. These values are then converted to usable acceleration units:
+```
 xAcc = xA / 16384.0;
 yAcc = yA / 16384.0;
 zAcc = zA / 16384.0;
-
+```
 Gyroscope values are also converted using the standard MPU-6050 scale factor:
+```
 xGyr = xG / 131.0;
 yGyr = yG / 131.0;
 zGyr = zG / 131.0;
-
+```
 Roll and pitch are estimated from the acceleration vector using:
+```
 float roll  = atan2(yAcc, zAcc) * 180.0 / M_PI;
 float pitch = atan2(-xAcc, sqrt(zAcc * zAcc + yAcc * yAcc)) * 180.0 / M_PI;
-
+```
 These values are then transmitted to the receiving system.
 
 Network Configuration
 The Wi‑Fi SSID, password, and UDP target address are configured in the sketch:
+```
+const char *ssid_Router     = "";
+const char *password_Router = "";
 
-const char *ssid_Router     = "NETGEAR97";
-const char *password_Router = "yellowriver414";
-
-const char * udpAddress = "192.168.0.16";
+const char * udpAddress = "";
 const int udpPort = 9990;
 
-const char *ssid_Router     = "NETGEAR97";
-const char *password_Router = "yellowriver414";
+const char *ssid_Router     = "";
+const char *password_Router = "";
 
-const char * udpAddress = "192.168.0.16";
+const char * udpAddress = "";
 const int udpPort = 9990;
-
+```
 Before running the code, update these with your own network details and the IP address of the receiving machine.
 
 UDP Packet Format
 The sketch sends a 5-byte UDP payload:
-
+```
 Byte 0: roll low byte
 Byte 1: roll high byte
 Byte 2: pitch low byte
 Byte 3: pitch high byte
 Byte 4: counter value
+```
 This compact format is useful for real-time monitoring and simple data logging.
 
 Example Serial Output
-
+```
 Roll: 12.45, Pitch: -7.21
 Roll: 12.81, Pitch: -7.35
 Roll: 13.02, Pitch: -7.40
-
+```
 This data confirms the sensor is responding and the UDP packet stream is active.
 
 Project Status
