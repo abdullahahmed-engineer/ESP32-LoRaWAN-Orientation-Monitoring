@@ -1,0 +1,150 @@
+# WiFi Sensor / LoRa Telemetry Sender
+
+A prototype embedded sensor node that reads motion data from an MPU-6050 inertial measurement unit, computes roll and pitch angles, and transmits the data using LoRa radio communication. This project is designed as a proof-of-concept for wireless telemetry and wireless data collection in embedded systems research and classroom demonstrations.
+
+## Overview
+
+This project demonstrates how a low-cost microcontroller can:
+
+- Read acceleration and gyroscope data from an MPU-6050 sensor
+- Convert raw sensor values into meaningful motion data
+- Compute roll and pitch angles
+- Transmit the resulting data over LoRa
+- Provide serial debug output for measurement verification
+
+The sender node is intended for use with a corresponding receiver node that listens on the LoRa channel and forwards the decoded information to a host system or logging service.
+
+## Project Purpose
+
+The goal of this project is to explore the integration of:
+
+- Embedded sensing
+- Wireless telemetry
+- Motion estimation
+- LoRa communication
+- Real-time data acquisition
+
+This design is suitable for academic, laboratory, and prototype-level experimentation rather than production deployment.
+
+## Features
+
+- MPU-6050 sensor interfacing using I2C
+- Real-time acceleration and gyroscope data acquisition
+- Roll and pitch estimation using accelerometer data
+- LoRa transmission of sensor values
+- Serial monitoring for debugging and testing
+- OLED display status output
+- Packet transmission loop with configurable timing
+
+## Hardware Requirements
+
+- Heltec ESP32 LoRa development board
+- MPU-6050 accelerometer/gyroscope module
+- Wi‑Fi access point (optional for companion network forwarding setup)
+- Host receiver or gateway for data collection
+- Supporting power source and jumper wires
+
+## Software Requirements
+
+The project is written for the Arduino IDE with ESP32 support and the Heltec board package installed.
+
+Required libraries:
+- Arduino.h
+- WiFi.h
+- WiFiUdp.h
+- heltec.h
+- Wire.h
+- HT_SSD1306Wire.h
+- LoRaWan_APP.h
+
+## System Architecture
+
+The sender node performs the following tasks:
+
+1. Initializes the MPU-6050 sensor
+2. Reads raw acceleration and gyroscope registers
+3. Converts raw values to physical units
+4. Computes roll and pitch angles
+5. Packages the values into a byte array
+6. Sends the packet over LoRa
+7. Updates OLED display and serial output
+
+## Sensor Data and Processing
+
+The code reads the sensor registers starting at address `0x3B`, which is used to retrieve the acceleration data for the X, Y, and Z axes. The raw values are converted using the scale factors defined for the MPU-6050:
+
+- Accelerometer scaling: `16384.0`
+- Gyroscope scaling: `131.0`
+
+The calculated values include:
+
+- `xAcc`, `yAcc`, `zAcc`
+- `xGyr`, `yGyr`, `zGyr`
+- `Temp`
+
+The orientation is estimated as:
+
+float roll  = atan2(yAcc, zAcc) * 180.0 / M_PI;
+float pitch = atan2(-xAcc, sqrt(zAcc * zAcc + yAcc * yAcc)) * 180.0 / M_PI;
+
+These are then converted to integers and transmitted over LoRa.
+
+LoRa Configuration
+The sketch configures LoRa parameters such as:
+
+Frequency: 915000000 Hz
+Bandwidth: 125 kHz
+Spreading factor: 7
+Coding rate: 4/5
+Preamble length: 8
+These values are selected for low-power, low-latency telemetry transmission in a prototype application.
+
+Packet Format
+The transmitted packet contains:
+
+roll low byte
+roll high byte
+pitch low byte
+pitch high byte
+a counter value (val)
+This compact format allows a receiving node to reconstruct the roll and pitch data efficiently.
+
+Example payload layout:
+
+Setup and Usage
+Install the Arduino IDE.
+Add ESP32 board support.
+Install the Heltec board package.
+Open the sketch in the IDE.
+Connect the Heltec ESP32 LoRa board and MPU-6050.
+Verify the I2C wiring and sensor address.
+Upload the code to the board.
+Open the serial monitor to inspect telemetry output.
+Use a compatible LoRa receiver to collect the packets.
+
+Serial Monitoring
+The sketch prints measurements such as:
+
+Roll: 12.34, Pitch: -8.21
+and logs when the LoRa transmission completes:
+Display Output
+The OLED display is used to show the current roll value for quick visual confirmation.
+
+Notes and Limitations
+This project is a research prototype and has some limitations:
+
+Hardcoded parameters are used for testing
+No robust packet acknowledgment system is implemented
+There is minimal error handling
+The design is intended for experimentation rather than production deployment
+Security and authentication are not included
+The code also contains commented sections for Wi‑Fi and UDP communication, indicating that the system was tested or developed in stages for both LoRa and networked forwarding use cases.
+
+Project Status
+Status: Prototype / Proof of Concept
+
+License
+This project is intended for educational and research use. Please check with the project owner before using it in a public or commercial application.
+
+Acknowledgements
+This project was created as part of an embedded systems and wireless communication investigation focused on real-time sensor data acquisition and radio-based telemetry transmission.
