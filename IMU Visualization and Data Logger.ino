@@ -7,10 +7,10 @@ date:   8/22/23
 #include <WiFiUdp.h>
 #include<Wire.h>
 // #include "Adafruit_VL53L0X.h"
-const char *ssid_Router     = "NETGEAR97"; 
-const char *password_Router = "yellowriver414";  
+const char *ssid_Router     = ""; 
+const char *password_Router = "";  
 
-const char * udpAddress = "192.168.0.16"; //the IP address of your computer in local WiFi
+const char * udpAddress = ""; //the IP address of your computer in local WiFi
 const int udpPort = 9990;  //Port number used for UDP connection
 WiFiUDP udp; //WiFiUDP class by Adruino framework
 
