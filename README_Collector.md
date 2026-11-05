@@ -97,7 +97,7 @@ The system then forwards this information using UDP to a configured receiver.
 
 Before uploading the code, update the Wi‑Fi and UDP settings:
 
-```cpp
+
 const char * ssid_Router = "NETGEAR97";
 const char * password_Router = "yellowriver414";
 
